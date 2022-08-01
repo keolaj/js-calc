@@ -15,7 +15,7 @@ function div(num1, num2) {
 }
 
 function operate(op, num1, num2) {
-	switch(op) {
+	switch (op) {
 		case "+":
 			return add(num1, num2);
 		case "-":
@@ -49,13 +49,25 @@ function pressNum(num) {
 }
 
 function pressOp(op) {
-	eqArr.push(currNum);
-	eqArr.push(op);
-	updateEqText();
-	currNum = 0;
+	if (currNum != null) {
+		eqArr.push(currNum);
+		eqArr.push(op);
+		updateEqText();
+	} else  {
+		eqArr.push(op);
+		updateEqText();
+	}
+	currNum = null;
 }
 function solve() {
-	
+	let runningSum = eqArr[0];
+	let index = 0;
+	while (index < eqArr.length - 1) {
+		console.log(operate(eqArr[index + 1], runningSum, eqArr[index + 2]))
+		runningSum = operate(eqArr[index + 1], runningSum, eqArr[index + 2]);
+		index += 2;
+	}
+	return runningSum;
 }
 
 document.querySelectorAll(".num").forEach(node => {
@@ -70,5 +82,10 @@ document.querySelectorAll(".op").forEach(node => {
 })
 document.querySelector(".eq").addEventListener("click", () => {
 	eqArr.push(currNum);
-
+	console.log(eqArr);
+	let newNum = solve();
+	updateDisplay(newNum);
+	eqArr = [newNum];
+	updateEqText();
+	currNum = null;
 })
