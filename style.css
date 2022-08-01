@@ -1,0 +1,19 @@
+.calc {
+	display: flex;
+	flex-direction: column;
+
+}
+
+.output {
+	text-align: right;
+}
+
+.calc-buttons {
+	display: flex;
+	flex-direction: column;
+}
+.nums-and-ops {
+	display: grid;
+	grid-template-rows: repeat(4, 1fr);
+	grid-template-columns: repeat(4, 1fr);
+}
