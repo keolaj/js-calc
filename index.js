@@ -44,6 +44,10 @@ function updateDisplay(num) {
 }
 
 function pressNum(num) {
+	if (eqArr[eqArr.length - 1] === "/" && num === 0) {
+		alert('y r u dividing by 0');
+		return;
+	}
 	currNum = (currNum * 10) + num;
 	updateDisplay(currNum);
 }
@@ -63,7 +67,6 @@ function solve() {
 	let runningSum = eqArr[0];
 	let index = 0;
 	while (index < eqArr.length - 1) {
-		console.log(operate(eqArr[index + 1], runningSum, eqArr[index + 2]))
 		runningSum = operate(eqArr[index + 1], runningSum, eqArr[index + 2]);
 		index += 2;
 	}
