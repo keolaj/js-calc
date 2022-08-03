@@ -118,7 +118,7 @@ function clickOp(op) {
 		calcState.setFirstTerm(null);
 		calcState.setOperator(op);
 	} else if (calcState.getFirstTerm() === null && calcState.getSecondTerm() && calcState.getOperator()) {
-		return;
+		calcState.setOperator(op);
 	} else {
 		calcState.setSecondTerm(calcState.getFirstTerm());
 		calcState.setFirstTerm(null);
