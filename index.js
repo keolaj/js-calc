@@ -27,6 +27,9 @@ function operate(op, num1, num2) {
 	}
 }
 
+var equationEl = document.querySelector(".equation");
+var displayEl = document.querySelector(".output");
+
 class CalcState {
 	constructor() {
 		this.firstTerm = null;
@@ -36,9 +39,11 @@ class CalcState {
 	}
 	setFirstTerm(num) {
 		this.firstTerm = num
+		displayEl.textContent = this.getFirstTerm();
 	}
 	setSecondTerm(num) {
 		this.secondTerm = num;
+		
 	}
 	getFirstTerm() {
 		return this.firstTerm;
@@ -52,6 +57,11 @@ class CalcState {
 	}
 	setOperator(op) {
 		this.operator = op;
+		if (this.getSecondTerm() !== null) {
+			equationEl.textContent = this.genEqString();
+		} else {
+			equationEl.textContent = ""
+		}
 	}
 
 	isValidOperation() {
@@ -60,6 +70,10 @@ class CalcState {
 		} else {
 			return false;
 		}
+	}
+
+	genEqString() {
+		return `${this.getSecondTerm()} ${this.getOperator()}`;
 	}
 }
 
