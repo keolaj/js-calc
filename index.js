@@ -85,8 +85,8 @@ function clickNum(num) {
 	if (currentNum === null || currentNum === "NaN" || currentNum === undefined) {
 		currentNum = 0;
 	}
-	currentNum = currentNum * 10 + num;
-	calcState.setFirstTerm(currentNum);
+	currentNum = `${currentNum}${num}`;
+	calcState.setFirstTerm(parseFloat(currentNum));
 }
 
 function clickOp(op) {
@@ -123,4 +123,7 @@ document.querySelector(".eq").addEventListener("click", () => {
 	} else {
 		return;
 	}
+})
+document.querySelector(".dec").addEventListener("click", () => {
+	calcState.setFirstTerm(calcState.getFirstTerm() + ".")
 })
