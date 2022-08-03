@@ -27,6 +27,13 @@ function operate(op, num1, num2) {
 	}
 }
 
+function roundToDecimalPlace(num, dec) {
+	if (num === null) {
+		return;
+	}
+	return parseFloat(num.toFixed(dec));	
+}
+
 var equationEl = document.querySelector(".equation");
 var displayEl = document.querySelector(".output");
 
@@ -39,7 +46,11 @@ class CalcState {
 	}
 	setFirstTerm(num) {
 		this.firstTerm = num
-		displayEl.textContent = this.getFirstTerm();
+		if (typeof(num) === "number") {
+			displayEl.textContent = roundToDecimalPlace(this.getFirstTerm(), 5);
+		} else {
+			displayEl.textContent = num;
+		}
 	}
 	setSecondTerm(num) {
 		this.secondTerm = num;
@@ -73,7 +84,7 @@ class CalcState {
 	}
 
 	genEqString() {
-		return `${this.getSecondTerm()} ${this.getOperator()}`;
+		return `${roundToDecimalPlace(this.getSecondTerm(), 5)} ${this.getOperator()}`;
 	}
 }
 
