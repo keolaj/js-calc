@@ -86,6 +86,12 @@ class CalcState {
 	genEqString() {
 		return `${roundToDecimalPlace(this.getSecondTerm(), 5)} ${this.getOperator()}`;
 	}
+
+	reset() {
+		this.setFirstTerm(null);
+		this.setFirstTerm(null);
+		this.setOperator(null);
+	}
 }
 
 let calcState = new CalcState();
@@ -136,5 +142,19 @@ document.querySelector(".eq").addEventListener("click", () => {
 	}
 })
 document.querySelector(".dec").addEventListener("click", () => {
-	calcState.setFirstTerm(calcState.getFirstTerm() + ".")
+	if (String(calcState.getFirstTerm()).includes(".")) {
+		return;
+	} else {
+		calcState.setFirstTerm(calcState.getFirstTerm() + ".")
+	}
+})
+document.querySelector(".clear").addEventListener("click", () => {
+	calcState.reset();
+})
+document.querySelector(".delete").addEventListener("click", () => {
+	if (String(calcState.getFirstTerm()).length > 1) {
+		calcState.setFirstTerm(parseFloat(String(calcState.getFirstTerm()).slice(0, -1)));
+	} else {
+		calcState.setFirstTerm(null);
+	}
 })
