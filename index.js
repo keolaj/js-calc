@@ -54,7 +54,7 @@ class CalcState {
 	}
 	setSecondTerm(num) {
 		this.secondTerm = num;
-		
+		equationEl.textContent = this.genEqString();
 	}
 	getFirstTerm() {
 		return this.firstTerm;
@@ -77,7 +77,12 @@ class CalcState {
 
 	isValidOperation() {
 		if (this.getFirstTerm() != null && this.getSecondTerm() != null && this.getOperator() != null) {
-			return true;
+			if (this.getFirstTerm() === 0 && this.getOperator() === "/") {
+				alert("cant divide by 0");
+				return false;
+			} else {
+				return true;
+			}
 		} else {
 			return false;
 		}
@@ -89,7 +94,7 @@ class CalcState {
 
 	reset() {
 		this.setFirstTerm(null);
-		this.setFirstTerm(null);
+		this.setSecondTerm(null);
 		this.setOperator(null);
 	}
 }
@@ -108,9 +113,12 @@ function clickNum(num) {
 
 function clickOp(op) {
 	if (calcState.getFirstTerm() !== null && calcState.getSecondTerm() !== null) {
-		let equals = operate(op, calcState.getSecondTerm(), calcState.getFirstTerm());
+		let equals = operate(calcState.getOperator(), calcState.getSecondTerm(), calcState.getFirstTerm());
 		calcState.setSecondTerm(equals);
 		calcState.setFirstTerm(null);
+		calcState.setOperator(op);
+	} else if (calcState.getFirstTerm() === null && calcState.getSecondTerm() && calcState.getOperator()) {
+		return;
 	} else {
 		calcState.setSecondTerm(calcState.getFirstTerm());
 		calcState.setFirstTerm(null);
@@ -152,7 +160,7 @@ document.querySelector(".clear").addEventListener("click", () => {
 	calcState.reset();
 })
 document.querySelector(".delete").addEventListener("click", () => {
-	if (String(calcState.getFirstTerm()).length > 1) {
+	if (String(calcState.getFirstTerm()).length > 1 && String(calcState.getFirstTerm()) !== "null") {
 		calcState.setFirstTerm(parseFloat(String(calcState.getFirstTerm()).slice(0, -1)));
 	} else {
 		calcState.setFirstTerm(null);

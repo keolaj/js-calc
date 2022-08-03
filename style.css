@@ -55,6 +55,15 @@
 	border-radius: 8px;
 	border: 1px solid;
 }
+.op {
+	background-color: orange;
+}
+.eq {
+	background-color: orange;
+}
+.dec {
+	background-color: orange;
+}
 .clear-delete {
 	width: 100%;
 	display: flex;
