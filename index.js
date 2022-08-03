@@ -153,7 +153,11 @@ document.querySelector(".dec").addEventListener("click", () => {
 	if (String(calcState.getFirstTerm()).includes(".")) {
 		return;
 	} else {
-		calcState.setFirstTerm(calcState.getFirstTerm() + ".")
+		if (calcState.getFirstTerm() === null) {
+			calcState.setFirstTerm(0 + ".");
+		} else {
+			calcState.setFirstTerm(calcState.getFirstTerm() + ".")
+		}
 	}
 })
 document.querySelector(".clear").addEventListener("click", () => {
