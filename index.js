@@ -27,68 +27,86 @@ function operate(op, num1, num2) {
 	}
 }
 
-var eqArr = [];
-var currNum = 0;
+class CalcState {
+	constructor() {
+		this.firstTerm = null;
+		this.secondTerm = null;
+		this.operator = null;
 
-function updateEqText() {
-	let eqString = ""
-	eqArr.forEach(el => {
-		eqString += " ";
-		eqString += el;
-	})
-	document.querySelector(".equation").textContent = eqString;
-}
-
-function updateDisplay(num) {
-	document.querySelector(".output").textContent = num;
-}
-
-function pressNum(num) {
-	if (eqArr[eqArr.length - 1] === "/" && num === 0) {
-		alert('y r u dividing by 0');
-		return;
 	}
-	currNum = (currNum * 10) + num;
-	updateDisplay(currNum);
+	setFirstTerm(num) {
+		this.firstTerm = num
+	}
+	setSecondTerm(num) {
+		this.secondTerm = num;
+	}
+	getFirstTerm() {
+		return this.firstTerm;
+	}
+	getSecondTerm() {
+		return this.secondTerm;
+	}
+
+	getOperator() {
+		return this.operator;
+	}
+	setOperator(op) {
+		this.operator = op;
+	}
+
+	isValidOperation() {
+		if (this.getFirstTerm() != null && this.getSecondTerm() != null && this.getOperator() != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 
-function pressOp(op) {
-	if (currNum != null) {
-		eqArr.push(currNum);
-		eqArr.push(op);
-		updateEqText();
-	} else  {
-		eqArr.push(op);
-		updateEqText();
+let calcState = new CalcState();
+
+function clickNum(num) {
+	console.log(num)
+	let currentNum = calcState.getFirstTerm();
+	if (currentNum === null || currentNum === "NaN" || currentNum === undefined) {
+		currentNum = 0;
 	}
-	currNum = null;
+	currentNum = currentNum * 10 + num;
+	calcState.setFirstTerm(currentNum);
 }
-function solve() {
-	let runningSum = eqArr[0];
-	let index = 0;
-	while (index < eqArr.length - 1) {
-		runningSum = operate(eqArr[index + 1], runningSum, eqArr[index + 2]);
-		index += 2;
+
+function clickOp(op) {
+	if (calcState.getFirstTerm() !== null && calcState.getSecondTerm() !== null) {
+		let equals = operate(op, calcState.getSecondTerm(), calcState.getFirstTerm());
+		calcState.setSecondTerm(equals);
+		calcState.setFirstTerm(null);
+	} else {
+		calcState.setSecondTerm(calcState.getFirstTerm());
+		calcState.setFirstTerm(null);
+		calcState.setOperator(op);
 	}
-	return runningSum;
 }
 
 document.querySelectorAll(".num").forEach(node => {
 	node.addEventListener("click", () => {
-		pressNum(parseInt(node.textContent))
+
+		clickNum(parseInt(node.textContent))
+		console.log(calcState);
 	})
 })
 document.querySelectorAll(".op").forEach(node => {
 	node.addEventListener("click", () => {
-		pressOp(node.textContent);
+		clickOp(node.textContent);
+		console.log(calcState);
 	})
 })
 document.querySelector(".eq").addEventListener("click", () => {
-	eqArr.push(currNum);
-	console.log(eqArr);
-	let newNum = solve();
-	updateDisplay(newNum);
-	eqArr = [newNum];
-	updateEqText();
-	currNum = null;
+	if (calcState.isValidOperation()) {
+		calcState.setFirstTerm(operate(calcState.getOperator(), calcState.getSecondTerm(), calcState.getFirstTerm()))
+		calcState.setSecondTerm(null);
+		calcState.setOperator(null);
+		console.log(calcState)
+	} else {
+		return;
+	}
 })
