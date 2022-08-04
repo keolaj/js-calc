@@ -46,11 +46,7 @@ class CalcState {
 	}
 	setFirstTerm(num) {
 		this.firstTerm = num
-		if (typeof(num) === "number") {
-			displayEl.textContent = roundToDecimalPlace(this.getFirstTerm(), 5);
-		} else {
-			displayEl.textContent = num;
-		}
+		displayEl.textContent = num;
 	}
 	setFirstTermToNumber() {
 		this.firstTerm = parseFloat(this.firstTerm);
@@ -116,7 +112,7 @@ function clickNum(num) {
 function clickOp(op) {
 	if (calcState.getFirstTerm() !== null && calcState.getSecondTerm() !== null) {
 		calcState.setFirstTermToNumber();
-		let equals = operate(calcState.getOperator(), calcState.getSecondTerm(), calcState.getFirstTerm());
+		let equals = roundToDecimalPlace(operate(calcState.getOperator(), calcState.getSecondTerm(), calcState.getFirstTerm()), 5);
 		calcState.setSecondTerm(equals);
 		calcState.setFirstTerm(null);
 		calcState.setOperator(op);
@@ -144,7 +140,7 @@ document.querySelectorAll(".op").forEach(node => {
 document.querySelector(".eq").addEventListener("click", () => {
 	if (calcState.isValidOperation()) {
 		calcState.setFirstTermToNumber();
-		calcState.setFirstTerm(operate(calcState.getOperator(), calcState.getSecondTerm(), calcState.getFirstTerm()))
+		calcState.setFirstTerm(roundToDecimalPlace(operate(calcState.getOperator(), calcState.getSecondTerm(), calcState.getFirstTerm()), 5))
 		calcState.setSecondTerm(null);
 		calcState.setOperator(null);
 	} else {
