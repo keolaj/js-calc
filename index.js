@@ -52,6 +52,9 @@ class CalcState {
 			displayEl.textContent = num;
 		}
 	}
+	setFirstTermToNumber() {
+		this.firstTerm = parseFloat(this.firstTerm);
+	}
 	setSecondTerm(num) {
 		this.secondTerm = num;
 		equationEl.textContent = this.genEqString();
@@ -102,17 +105,17 @@ class CalcState {
 let calcState = new CalcState();
 
 function clickNum(num) {
-	console.log(num)
 	let currentNum = calcState.getFirstTerm();
 	if (currentNum === null || currentNum === "NaN" || currentNum === undefined) {
-		currentNum = 0;
+		currentNum = "";
 	}
 	currentNum = `${currentNum}${num}`;
-	calcState.setFirstTerm(parseFloat(currentNum));
+	calcState.setFirstTerm(currentNum);
 }
 
 function clickOp(op) {
 	if (calcState.getFirstTerm() !== null && calcState.getSecondTerm() !== null) {
+		calcState.setFirstTermToNumber();
 		let equals = operate(calcState.getOperator(), calcState.getSecondTerm(), calcState.getFirstTerm());
 		calcState.setSecondTerm(equals);
 		calcState.setFirstTerm(null);
@@ -120,6 +123,7 @@ function clickOp(op) {
 	} else if (calcState.getFirstTerm() === null && calcState.getSecondTerm() && calcState.getOperator()) {
 		calcState.setOperator(op);
 	} else {
+		calcState.setFirstTermToNumber();
 		calcState.setSecondTerm(calcState.getFirstTerm());
 		calcState.setFirstTerm(null);
 		calcState.setOperator(op);
@@ -130,21 +134,19 @@ document.querySelectorAll(".num").forEach(node => {
 	node.addEventListener("click", () => {
 
 		clickNum(parseInt(node.textContent))
-		console.log(calcState);
 	})
 })
 document.querySelectorAll(".op").forEach(node => {
 	node.addEventListener("click", () => {
 		clickOp(node.textContent);
-		console.log(calcState);
 	})
 })
 document.querySelector(".eq").addEventListener("click", () => {
 	if (calcState.isValidOperation()) {
+		calcState.setFirstTermToNumber();
 		calcState.setFirstTerm(operate(calcState.getOperator(), calcState.getSecondTerm(), calcState.getFirstTerm()))
 		calcState.setSecondTerm(null);
 		calcState.setOperator(null);
-		console.log(calcState)
 	} else {
 		return;
 	}
@@ -165,7 +167,7 @@ document.querySelector(".clear").addEventListener("click", () => {
 })
 document.querySelector(".delete").addEventListener("click", () => {
 	if (String(calcState.getFirstTerm()).length > 1 && String(calcState.getFirstTerm()) !== "null") {
-		calcState.setFirstTerm(parseFloat(String(calcState.getFirstTerm()).slice(0, -1)));
+		calcState.setFirstTerm(String(calcState.getFirstTerm()).slice(0, -1));
 	} else {
 		calcState.setFirstTerm(null);
 	}
